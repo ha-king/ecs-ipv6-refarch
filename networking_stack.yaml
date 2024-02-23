@@ -68,7 +68,8 @@ Resources:
          - Fn::GetAZs: {Ref: 'AWS::Region'}
       CidrBlock: !Ref PublicSubnetOneCIDR
       Ipv6CidrBlock: !Select [0, !Cidr [!Select [0, !GetAtt 'VPC.Ipv6CidrBlocks'], 4, 64]]
-      MapPublicIpOnLaunch: true
+      MapPublicIpOnLaunch: false
+      AssignIpv6AddressOnCreation: true
 
   PublicSubnetTwo:
     DependsOn: VPCCidrBlock
@@ -81,7 +82,8 @@ Resources:
          - Fn::GetAZs: {Ref: 'AWS::Region'}
       CidrBlock: !Ref PublicSubnetTwoCIDR
       Ipv6CidrBlock: !Select [1, !Cidr [!Select [0, !GetAtt 'VPC.Ipv6CidrBlocks'], 4, 64]]
-      MapPublicIpOnLaunch: true
+      MapPublicIpOnLaunch: false
+      AssignIpv6AddressOnCreation: true
 
   PrivateSubnetOne:
     DependsOn: VPCCidrBlock
@@ -95,6 +97,7 @@ Resources:
       CidrBlock: !Ref PrivateSubnetOneCIDR
       Ipv6CidrBlock: !Select [2, !Cidr [!Select [0, !GetAtt 'VPC.Ipv6CidrBlocks'], 4, 64]]
       MapPublicIpOnLaunch: false
+      AssignIpv6AddressOnCreation: true
 
   PrivateSubnetTwo:
     DependsOn: VPCCidrBlock
@@ -108,6 +111,7 @@ Resources:
       CidrBlock: !Ref PrivateSubnetTwoCIDR
       Ipv6CidrBlock: !Select [3, !Cidr [!Select [0, !GetAtt 'VPC.Ipv6CidrBlocks'], 4, 64]]
       MapPublicIpOnLaunch: false
+      AssignIpv6AddressOnCreation: true
 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
@@ -395,6 +399,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       Scheme: internet-facing
+      IpAddressType: dualstack
       LoadBalancerAttributes:
       - Key: idle_timeout.timeout_seconds
         Value: '30'
